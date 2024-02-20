@@ -25,7 +25,7 @@ public class AdminController {
 
     private final RoleService roleService;
 
-    private UserValidator userValidator;
+    private final UserValidator userValidator;
 
     @Autowired
     public AdminController(UserService userService, RoleService roleService, UserValidator userValidator) {

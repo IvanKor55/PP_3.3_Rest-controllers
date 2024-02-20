@@ -10,7 +10,7 @@ import ru.javamentor.rest.service.UserService;
 @Component
 public class UserValidator implements Validator {
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserValidator(UserService userService) {

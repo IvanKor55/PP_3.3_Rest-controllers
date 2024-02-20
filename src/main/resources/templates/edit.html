@@ -52,7 +52,7 @@
                                    th:name="password" th:value="${user.getPassword()}">
                         </div>
                         <div class="form-group role-group">
-                            <label><strong>Role</strong></label>
+                            <label for="roleSelect"><strong>Role</strong></label>
                             <select multiple class="form-control" id="roleSelect" name="rolesSelectedList">
                                 <option th:each="role : ${rolesList}"
                                         th:value="${role.getId()}"

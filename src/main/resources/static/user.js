@@ -3,7 +3,6 @@ function getUser(userId) {
         .then(function (response) {
             if (response.status === 404 || response.status === 400) {
                 response.text().then((value) => console.warn("Ошибка загрузки пользователя: " + value));
-                return;
             } else {
                 response.json().then(user => {
                     $('#userLogin').append('<span><strong>'
