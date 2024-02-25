@@ -25,8 +25,9 @@ public class UserValidator implements Validator {
     @Override
     public void validate(Object object, Errors errors) {
         User user = (User) object;
-        if (userService.findByLogin(user.getLogin()) == null) {
-            return;
+        User userFind = userService.findByLogin(user.getLogin());
+        if (userFind == null || user.getId() == userFind.getId()) {
+            return; // Всё ОК
         }
         errors.rejectValue("login", "", "Такой email уже существует");
     }

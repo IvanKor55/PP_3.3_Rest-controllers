@@ -1,20 +1,23 @@
 package ru.javamentor.rest.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ru.javamentor.rest.model.User;
 import ru.javamentor.rest.service.RoleService;
 import ru.javamentor.rest.service.UserService;
 import ru.javamentor.rest.util.UserValidator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -54,41 +57,32 @@ public class AdminController {
         return pageAdmin;
     }
 
-    @PostMapping("/edit")
-    public String updateUser(@ModelAttribute("user") User user, HttpServletRequest request) {
-        userService.editUser(user, request.getParameterValues("rolesSelectedList"));
-        return "redirect:/admin";
-    }
-
-//    @PostMapping("/edit")
-//    public ResponseEntity<HttpStatus> updateUser(@RequestBody User user, HttpServletRequest request) {
-//        userService.editUser(user, request.getParameterValues("rolesSelectedList"));
-//        return ResponseEntity.ok(HttpStatus.OK);
-//
-//    }
-
-    @GetMapping("/new")
-    public String createUser(Model model) {
-        model.addAttribute("user",new User());
-//        model.addAttribute("rolesList",roleService.getAllRoles());
-        return "new";
-    }
-
-    @PostMapping("/new")
-    public String addUser(@ModelAttribute("user") @Valid User user, HttpServletRequest request,
-    BindingResult bindingResult) {
+    @PostMapping("/save")
+    public ResponseEntity<Object> updateUser(@RequestBody @Valid User user, BindingResult bindingResult) {
         userValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
-            return "redirect:/admin/new";}
-        else {
-            userService.addUser(user, request.getParameterValues("rolesSelectedList"));
-            return "redirect:/admin";
+            List<String> errors = new ArrayList<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errors.add(error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errors);
+        } else {
+            userService.saveUser(user);
+            return ResponseEntity.ok(HttpStatus.OK);
         }
     }
 
+    @ResponseBody
+    @GetMapping("/new")
+    public ResponseEntity<User> createUser() {
+        System.out.println("userService.getLastID()) = " + userService.getLastID());
+        return ResponseEntity.ok(userService.getUser(userService.getLastID()));
+
+    }
+
     @PostMapping("/delete")
-    public String removeUser(Long id) {
+    public ResponseEntity<HttpStatus> removeUser( @RequestParam(value = "id") Long id) {
         userService.deleteUser(id);
-        return "redirect:/admin";
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

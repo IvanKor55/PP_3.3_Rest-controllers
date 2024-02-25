@@ -19,12 +19,11 @@ public class Role implements GrantedAuthority {
     @Setter
     private String authority;
 
-//    @Override
-//    public String toString() {
-//        return "Role{" +
-//                "id=" + id +
-//                ", authority='" + authority + '\'' +
-//                ", user=" + user +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", authority='" + authority +
+                '}';
+    }
 }

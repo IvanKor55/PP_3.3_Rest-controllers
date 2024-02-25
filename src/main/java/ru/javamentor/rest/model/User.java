@@ -1,6 +1,7 @@
 package ru.javamentor.rest.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,6 +30,7 @@ public class User {
     @Column(name = "age")
     @Getter
     @Setter
+    @Positive(message = "Возраст не может быть отрицательным")
     private int age;
 
     @Column(name = "login")
@@ -41,7 +43,7 @@ public class User {
     @Setter
     private String password;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -59,17 +61,17 @@ public class User {
         this.password = password;
     }
 
-//    @Override
-//    public String toString() {
-//        return "User{" +
-//                "id=" + id +
-//                ", firstName='" + firstName + '\'' +
-//                ", lastName='" + lastName + '\'' +
-//                ", age=" + age +
-//                ", login='" + login + '\'' +
-//                ", password='" + password + '\'' +
-//                ", role=" + roles +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + roles +
+                '}';
+    }
 }
 

@@ -6,15 +6,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.javamentor.rest.model.Role;
 import ru.javamentor.rest.model.User;
 import ru.javamentor.rest.repositories.UserRepository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -34,37 +29,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void addUser(User user, String[] rolesList) {
+    public void saveUser(User user) {
         if (user.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
-        userRepository.save(user);
-        if (rolesList != null) {
-            List<Role> roles = Arrays.stream(rolesList)
-                    .map(roleId -> roleService.getRole(Long.parseLong(roleId)).get())
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-            if (!roles.isEmpty()) {
-                user.setRoles(roles);
-            }
-        }
-    }
-
-    @Transactional
-    @Override
-    public void editUser(User user, String[] rolesList) {
-        if (user.getPassword() != null) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
-        if (rolesList != null) {
-            List<Role> roles = new ArrayList<>();
-            for (String roleId : rolesList) {
-                Role role = roleService.getRole(Long.parseLong(roleId)).get();
-                roles.add(role);
-            }
-            if (!roles.isEmpty()) {
-                user.setRoles(roles);
-            }
         }
         userRepository.save(user);
     }
@@ -88,6 +55,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByLogin(String login) {
         return userRepository.findByLogin(login);
+    }
+
+    @Override
+    public Long getLastID() {
+        return userRepository.getLastID();
     }
 
     @Override

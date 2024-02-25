@@ -6,9 +6,8 @@ import java.util.List;
 
 public interface UserService extends UserDetailsService {
 
-    void addUser(User user, String[] rolesList);
 
-    void editUser(User user, String[] rolesList);
+    void saveUser(User user);
 
     void deleteUser(Long id);
 
@@ -17,4 +16,6 @@ public interface UserService extends UserDetailsService {
     User getUser (Long id);
 
     User findByLogin(String login);
+
+    Long getLastID();
 }
