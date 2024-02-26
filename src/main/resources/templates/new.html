@@ -1,0 +1,51 @@
+<div class="tab-content col-12" id="user-new">
+    <h4>Add new user</h4>
+    <div class="form bg-white">
+        <form>
+            <div class="form-container col-md-6 mx-auto mt-6">
+                <div class="form-group">
+                    <input type="hidden" class="form-control" id="useridN" name="id" readonly>
+                </div>
+                <div class="text-center">
+                    <label for="firstnameN" class="form-label"><strong>First name</strong></label>
+                    <input type="text" id="firstnameN" name="firstName" class="form-control"/>
+                </div>
+
+                <div class="text-center">
+                    <label for="lastnameN" class="form-label"><strong>Last name</strong></label>
+                    <input type="text" id="lastnameN" name="lastName" class="form-control"/>
+                </div>
+
+                <div class="text-center">
+                    <label for="ageN" class="form-label"><strong>Age</strong></label>
+                    <input type="text" id="ageN" name="age" class="form-control"/>
+                </div>
+
+                <div class="text-center">
+                    <label for="usernameN" class="form-label"><strong>Email</strong></label>
+                    <input type="email" id="usernameN" name="login" class="form-control" autocomplete="off"/>
+                </div>
+
+                <div class="text-center">
+                    <label for="passwordN" class="form-label"><strong>Password</strong></label>
+                    <input type="password" id="passwordN" name="password" class="form-control"
+                           autocomplete="new-password"/>
+                </div>
+
+                <div class="text-center role-group">
+                    <label for="roleSelectN" class="form-label"><strong>Role</strong></label>
+                    <select multiple class="form-control" id="roleSelectN" name="rolesSelectedList">
+                    </select>
+                </div>
+
+                <div id="error-messages" class="alert alert-danger" style="display: none;">
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success align-content-center" onclick="editUser(false)">
+                        Add new user</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

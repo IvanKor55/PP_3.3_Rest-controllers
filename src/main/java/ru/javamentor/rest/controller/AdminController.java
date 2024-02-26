@@ -75,7 +75,6 @@ public class AdminController {
     @ResponseBody
     @GetMapping("/new")
     public ResponseEntity<User> createUser() {
-        System.out.println("userService.getLastID()) = " + userService.getLastID());
         return ResponseEntity.ok(userService.getUser(userService.getLastID()));
 
     }

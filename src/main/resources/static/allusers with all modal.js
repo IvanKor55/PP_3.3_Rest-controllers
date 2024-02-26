@@ -58,16 +58,35 @@ function userModal(userId, modeDelete) {
                         data-bs-dismiss="modal" aria-label="Close">Close</button>`;
     let rolesSelect = "";
 
+    if (!userId) {
+        // кнопка добавления user-а
+        $('#user-modal').find('.modal-title').text('Add new user');
+        button += '<button type="submit" class="btn btn-success" onclick="editUser(false)">Add new user</button>';
+        allRoles.map(role => {
+            rolesSelect += '<option value=' + role.id
+                + '>' + role.authority.replace('ROLE_', '') + '</option>'
+        })
+        // очистка формы ввода нового user-а
+        $('#user-modal').find('#userid').val('');
+        $('#user-modal').find('#firstname').val('');
+        $('#user-modal').find('#lastname').val('');
+        $('#user-modal').find('#age').val('');
+        $('#user-modal').find('#username').val('');
+        $('#user-modal').find('#password').val('');
+        const errorContainer = document.getElementById('error-messages');
+        errorContainer.innerHTML = '';
+        errorContainer.style.display = 'none';
+    } else {
         // поиск по списку user-а для отбражения его данных
         for (const user of allUsers) {
             if (user.id === userId) {
                 // отображение данных user-а
-                $('#user-modal').find('#useridE').val(user.id);
-                $('#user-modal').find('#firstnameE').val(user.firstName);
-                $('#user-modal').find('#lastnameE').val(user.lastName);
-                $('#user-modal').find('#ageE').val(user.age);
-                $('#user-modal').find('#usernameE').val(user.login);
-                $('#user-modal').find('#passwordE').val(user.password);
+                $('#user-modal').find('#userid').val(user.id);
+                $('#user-modal').find('#firstname').val(user.firstName);
+                $('#user-modal').find('#lastname').val(user.lastName);
+                $('#user-modal').find('#age').val(user.age);
+                $('#user-modal').find('#username').val(user.login);
+                $('#user-modal').find('#password').val(user.password);
                 const errorContainer = document.getElementById('error-messages');
                 errorContainer.innerHTML = '';
                 errorContainer.style.display = 'none';
@@ -94,9 +113,9 @@ function userModal(userId, modeDelete) {
                 }
                 break;
             }
-
+        }
     }
-    $('#user-modal').find('#roleSelectE').empty().append(rolesSelect);
+    $('#user-modal').find('#roleSelect').empty().append(rolesSelect);
     $('#user-modal').find('.modal-footer').empty().append(button);
 
     const modalElement = document.getElementById('user-modal');
@@ -127,31 +146,23 @@ async function deleteUser(id) {
 
 // Обработка данных из модального окна для редактирования user-а или сохранения нового
 async function editUser(id) {
-    let selector;
-    if(!id) {
-        selector = 'N';
-    } else {
-        selector = 'E';
-    }
     // формирование массива сущностей role
-    let rolesSelected = $('#roleSelect' + selector).val().map(roleId => {
+    let rolesSelected = $('#user-modal').find('#roleSelect').val().map(roleId => {
         return {
             'id': parseInt(roleId),
             'authority': allRoles.find(role => role.id == roleId).authority
         }
     });
-
     // формирование сущности user
     let userUpdate = {
-        'id': parseInt($('#userid' + selector).val()),
-        'firstName': $('#firstname' + selector).val(),
-        'lastName': $('#lastname' + selector).val(),
-        'age': $('#age' + selector).val(),
-        'login': $('#username' + selector).val(),
-        'password': $('#password' + selector).val(),
+        'id': parseInt($('#user-modal').find('#userid').val()),
+        'firstName': $('#user-modal').find('#firstname').val(),
+        'lastName': $('#user-modal').find('#lastname').val(),
+        'age': $('#user-modal').find('#age').val(),
+        'login': $('#user-modal').find('#username').val(),
+        'password': $('#user-modal').find('#password').val(),
         'roles': rolesSelected
     };
-
     // отправка данных в контроллер
     await fetch('/admin/save', {
         method: 'POST',
@@ -169,7 +180,6 @@ async function editUser(id) {
                             // добавление нового user-а в список всех user-ов
                             allUsers.push(userNew);
                         });
-                    document.getElementById('user-tab').click();
                 } else {
                     let i = 0;
                     // поиск редактируемого user-а в списке всех user-ов
@@ -181,8 +191,8 @@ async function editUser(id) {
                         }
                         i++;
                     }
-                    modal.hide();
                 }
+                modal.hide();
                 getAllUsers(false);
             } else {
                 // вывод оошибок валидации
@@ -197,32 +207,10 @@ async function editUser(id) {
                 });
                 errorContainer.style.display = 'block'; // Показать сообщение об ошибке
             }
+            if (!id) {
+                document.getElementById('user-tab').click();
+            }
         });
 }
 
-function newUser() {
-    const form = document.getElementById('user-new');
-
-    // очистка формы ввода нового user-а
-    $('#useridN').val('');
-    $('#firstnameN').val('');
-    $('#lastnameN').val('');
-    $('#ageN').val('');
-    $('#usernameN').val('');
-    $('#passwordN').val('');
-
-    let rolesSelect = "";
-    allRoles.map(role => {
-        rolesSelect += '<option value=' + role.id
-            + '>' + role.authority.replace('ROLE_', '') + '</option>'
-    })
-    $('#user-new').find('#roleSelectN').empty().append(rolesSelect);
-
-    form.addEventListener('submit', async function(event) {
-        event.preventDefault(); // Предотвращаем стандартное поведение формы (перезагрузку страницы)
-    });
-
-    const formContainer = document.getElementById('new');
-    formContainer.appendChild(form);
-}
 getAllUsers(true);

@@ -40,7 +40,7 @@
                            role="tab" aria-controls="all-users" aria-selected="true">Users Table
                         </a>
                         <a class="nav-link" id="new-tab" data-bs-toggle="tab" href="#new"
-                           role="tab" aria-controls="new" aria-selected="false" onclick="userModal(false, false)">
+                           role="tab" aria-controls="new" aria-selected="false" onclick="newUser()">
                             New User
                         </a>
                     </nav>
@@ -71,14 +71,15 @@
                         </div>
                     </div>
                 </div>
-                <div id="new" class="tab-pane fade" role="tabpanel" aria-current="page" aria-labelledby="new-tab">
+                <div id="new" class="tab-pane fade" role="tabpanel" aria-current="page">
 <!--                    <div id="newUser" th:replace="~{new :: content}"></div>-->
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div th:replace="modal"/>
+<div th:replace="modal"/></div>
+<div th:replace="new"/></div>
 <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
 <script type="text/javascript" src="/webjars/bootstrap/5.3.2/js/bootstrap.min.js"></script>
 <script src="/allusers.js"></script>
