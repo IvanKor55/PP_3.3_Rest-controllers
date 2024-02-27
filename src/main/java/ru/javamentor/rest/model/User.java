@@ -9,46 +9,34 @@ import java.util.List;
 
 @Entity
 @Table(name = "user")
+@Getter
+@Setter
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
-    @Setter
     private Long id;
 
     @Column(name = "name")
-    @Getter
-    @Setter
     private String firstName;
 
     @Column(name = "last_name")
-    @Getter
-    @Setter
     private String lastName;
 
     @Column(name = "age")
-    @Getter
-    @Setter
     @Positive(message = "Возраст не может быть отрицательным")
     private int age;
 
     @Column(name = "login")
-    @Getter
-    @Setter
     private String login;
 
     @Column(name = "password")
-    @Getter
-    @Setter
     private String password;
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @Getter
-    @Setter
     private List<Role> roles;
 
     public User() {}
