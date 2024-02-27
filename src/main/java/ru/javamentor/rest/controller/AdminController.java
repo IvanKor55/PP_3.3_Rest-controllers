@@ -56,7 +56,7 @@ public class AdminController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Object> updateUser(@RequestBody @Valid User user, BindingResult bindingResult) {
+    public ResponseEntity<Object> updateUser(@Valid User user, BindingResult bindingResult) {
         userValidator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
             List<String> errors = new ArrayList<>();
@@ -77,7 +77,7 @@ public class AdminController {
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<HttpStatus> removeUser( @RequestParam(value = "id") Long id) {
+    public ResponseEntity<HttpStatus> removeUser(@RequestParam(value = "id") Long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
