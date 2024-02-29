@@ -73,7 +73,6 @@ public class AdminController {
     @GetMapping("/new")
     public ResponseEntity<User> createUser() {
         return ResponseEntity.ok(userService.getUser(userService.getLastID()));
-
     }
 
     @PostMapping("/delete")
